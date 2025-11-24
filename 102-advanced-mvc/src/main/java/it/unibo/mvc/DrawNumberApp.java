@@ -1,19 +1,19 @@
 package it.unibo.mvc;
-
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
+import it.unibo.mvc.utilities.ParametersReader;
+
 /**
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
-    private static final int MIN = 0;
-    private static final int MAX = 100;
-    private static final int ATTEMPTS = 10;
-
+    private static final int MIN = findParameter(0);
+    private static final int MAX = findParameter(1);
+    private static final int ATTEMPTS = findParameter(2);
     private final DrawNumber model;
     private final List<DrawNumberView> views;
-
+    
     /**
      * @param views
      *            the views to attach
@@ -58,6 +58,20 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
          * until the last thread terminates.
          */
         System.exit(0);
+    }
+
+    private static int findParameter(int i) {
+        final ParametersReader reader = new ParametersReader();
+        if(i < 0 || i > 2) {
+            throw new IllegalArgumentException();
+        }
+        int counter = 0;
+        for(var eger : reader){
+            if(i == counter) { return eger; }
+            counter++;
+        }
+        return -1;
+
     }
 
     /**
