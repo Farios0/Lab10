@@ -14,7 +14,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     private static final int ATTEMPTS = findParameter(2);
     private final DrawNumber model;
     private final List<DrawNumberView> views;
-    
+
     /**
      * @param views
      *            the views to attach
@@ -86,5 +86,4 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     public static void main(final String... args) throws FileNotFoundException {
         new DrawNumberApp(new DrawNumberViewImpl());
     }
-
 }

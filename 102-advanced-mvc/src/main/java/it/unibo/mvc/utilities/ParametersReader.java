@@ -19,11 +19,16 @@ public class ParametersReader implements Iterable<Integer>, Closeable {
     }
 
     @Override
+    public void close() throws IOException {
+        reader.close();
+    }
+
+    @Override
     public Iterator<Integer> iterator() {
         return new ParametersIterator();
-    } 
+    }
 
-    class ParametersIterator implements Iterator<Integer>{
+    private class ParametersIterator implements Iterator<Integer>{
         private String current;
 
         @Override
@@ -31,7 +36,7 @@ public class ParametersReader implements Iterable<Integer>, Closeable {
             String riga = null;
             try {
                 riga = reader.readLine();
-            } catch (IOException e) { e.printStackTrace(); }
+            } catch (final IOException e) { e.printStackTrace(); }
             if (riga == null){
                     return false;
             }
@@ -44,20 +49,10 @@ public class ParametersReader implements Iterable<Integer>, Closeable {
             return getParameter(current);
         }
 
-        private int getParameter(String line){
+        private int getParameter(String line) {
         String[] result = line.split(": ");
         return Integer.parseInt(result[result.length - 1]);
-    }
+        }
 
     }
-
-    @Override
-    public void close() throws IOException {
-        reader.close();
-    }
-
-    
-    
-
-
 }
