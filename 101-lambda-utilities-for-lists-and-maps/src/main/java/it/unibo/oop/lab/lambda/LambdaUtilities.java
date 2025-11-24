@@ -1,6 +1,7 @@
 package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,12 @@ public final class LambdaUtilities {
      *         otherwise.
      */
     public static <T> List<Optional<T>> optFilter(final List<T> list, final Predicate<T> pre) {
-        /*
-         * Suggestion: consider Optional.filter
-         */
-        return emptyList();
+        final List<Optional<T>> result = new ArrayList<>();
+        list.forEach(t -> {
+            Optional<T> o = Optional.of(t);
+            result.add(o.filter(pre));
+        });
+        return result;
     }
 
     /**
@@ -80,10 +83,16 @@ public final class LambdaUtilities {
      *         based on the mapping done by the function
      */
     public static <R, T> Map<R, Set<T>> group(final List<T> list, final Function<T, R> op) {
+        final Map<R, Set<T>> result = new HashMap<>();
+        list.forEach(t -> {
+            result.merge(op.apply(t), result.get(op.apply(t)), null);
+        });
+        
+        
         /*
          * Suggestion: consider Map.merge
          */
-        return emptyMap();
+        return result;
     }
 
     /**
