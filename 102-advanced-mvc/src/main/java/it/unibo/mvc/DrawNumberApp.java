@@ -1,5 +1,6 @@
 package it.unibo.mvc;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,17 +62,20 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     }
 
     private static int findParameter(int i) {
-        final ParametersReader reader = new ParametersReader();
-        if(i < 0 || i > 2) {
-            throw new IllegalArgumentException();
-        }
-        int counter = 0;
-        for(var eger : reader){
-            if(i == counter) { return eger; }
-            counter++;
+        try (final ParametersReader reader = new ParametersReader();) {
+            if(i < 0 || i > 2) {
+                throw new IllegalArgumentException();
+            }
+            int counter = 0;
+            for(var eger : reader){
+                if(i == counter) { return eger; }
+                counter++;
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return -1;
-
     }
 
     /**

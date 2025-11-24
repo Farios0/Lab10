@@ -1,22 +1,19 @@
 package it.unibo.mvc.utilities;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 
-public class ParametersReader implements Iterable<Integer>{
-    private final File toRead = new File("src/main/resources/config.yml");
-    
+public class ParametersReader implements Iterable<Integer>, Closeable {
     private BufferedReader reader;
-    
 
     public ParametersReader() {
         try {
-            reader = new BufferedReader(new FileReader(toRead));
-        } catch (FileNotFoundException e) {
+            reader = new BufferedReader(new FileReader("src/main/resources/config.yml"));
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -52,6 +49,11 @@ public class ParametersReader implements Iterable<Integer>{
         return Integer.parseInt(result[result.length - 1]);
     }
 
+    }
+
+    @Override
+    public void close() throws IOException {
+        reader.close();
     }
 
     
