@@ -31,42 +31,43 @@ public final class MusicGroupImpl implements MusicGroup {
 
     @Override
     public Stream<String> orderedSongNames() {
-        return null;
+        return songs.stream().map(t -> t.getSongName()).sorted();
     }
 
     @Override
     public Stream<String> albumNames() {
-        return null;
+        return albums.keySet().stream();
     }
 
     @Override
     public Stream<String> albumInYear(final int year) {
-        return null;
+        return albums.keySet().stream().filter(t -> albums.get(t) == year);
     }
 
     @Override
     public int countSongs(final String albumName) {
-        return -1;
+        return (int) songs.stream().filter(t -> t.getAlbumName().orElse("").equals(albumName)).count();
     }
 
     @Override
     public int countSongsInNoAlbum() {
-        return -1;
+        return (int) songs.stream().filter(t -> t.getAlbumName().orElse("").equals("")).count();
     }
 
     @Override
     public OptionalDouble averageDurationOfSongs(final String albumName) {
-        return OptionalDouble.empty();
+        return songs.stream().filter(t -> t.getAlbumName().orElse("").equals(albumName))
+        .mapToDouble(t -> t.getDuration()).average();
     }
 
     @Override
     public Optional<String> longestSong() {
-        return Optional.empty();
+        return songs.stream().max((t1, t2) -> Double.compare(t1.getDuration(), t2.getDuration())).map(t -> t.getSongName());
     }
 
     @Override
     public Optional<String> longestAlbum() {
-        return Optional.empty();
+        return albums.keySet().stream().max((a1, a2) -> Double.compare(averageDurationOfSongs(a1).getAsDouble(), averageDurationOfSongs(a2).getAsDouble()));
     }
 
     private static final class Song {
